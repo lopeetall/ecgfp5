@@ -1,5 +1,6 @@
 use core::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign};
 use core::convert::TryFrom;
+use std::fmt::Display;
 
 // ========================================================================
 // GF(p)
@@ -389,6 +390,12 @@ impl GFp {
     #[inline(always)]
     pub fn select(c: u64, x0: GFp, x1: GFp) -> GFp {
         GFp(x0.0 ^ (c & (x0.0 ^ x1.0)))
+    }
+}
+
+impl Display for GFp {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        write!(f, "{:#016x}", self.to_u64())
     }
 }
 
@@ -1113,6 +1120,25 @@ impl GFp5 {
         self.0[2].0 |= c & y.0[2].0;
         self.0[3].0 |= c & y.0[3].0;
         self.0[4].0 |= c & y.0[4].0;
+    }
+}
+
+
+impl Display for GFp5 {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let string = self.0
+            .iter()
+            .enumerate()
+            .map(|(i, c)| {
+                let z = match i {
+                    0 => format!(""),
+                    _ => format!("z^{}", i),
+                };
+                format!("{:#016x}{}", c.to_u64(), z)
+            })
+            .collect::<Vec<_>>()
+            .join(" + ");
+        write!(f, "{}", string)
     }
 }
 
