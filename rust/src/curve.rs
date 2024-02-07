@@ -4,6 +4,7 @@
 #![allow(non_snake_case)]
 
 use core::ops::{Add, AddAssign, Neg, Sub, SubAssign, Mul, MulAssign};
+use std::fmt::Display;
 use super::field::{GFp, GFp5};
 use super::scalar::Scalar;
 use super::multab::{G0, G40, G80, G120, G160, G200, G240, G280};
@@ -20,6 +21,13 @@ pub struct Point {
     Z: GFp5,
     U: GFp5,
     T: GFp5,
+}
+
+impl Display for Point {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let (x, y) = (self.X/self.Z, self.U/self.T);
+        write!(f, "({}, {})", x, y)
+    }
 }
 
 impl Point {
