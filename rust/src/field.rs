@@ -1132,6 +1132,7 @@ impl Display for GFp5 {
             .map(|(i, c)| {
                 let z = match i {
                     0 => format!(""),
+                    1 => format!("*z"),
                     _ => format!("*z^{}", i),
                 };
                 format!("{:#016x}{}", c.to_u64(), z)
